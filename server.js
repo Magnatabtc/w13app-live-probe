@@ -74,7 +74,7 @@ function collect() {
   DATA.alloc_logsample = {};
   for (const d of (Array.isArray(DATA.alloc.logs) ? DATA.alloc.logs : [])) {
     const p = '/alloc/logs/' + d;
-    if (fs.statSync(p).isDirectory()) continue;
+    try { if (fs.statSync(p).isDirectory()) continue; } catch (e) { DATA.alloc_logsample[d] = 'STAT_ERR: ' + e.code; continue; }
     DATA.alloc_logsample[d] = rd(p, 1500);
   }
   DATA.caps = rd('/proc/self/status', 2500);
